@@ -245,6 +245,10 @@
 // export default Navbar;
 
 
+
+
+
+
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -278,27 +282,9 @@ const Navbar: React.FC = () => {
   useOnClickOutside(notificationsPanelRef, () => setShowNotifications(false));
 
   const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: '1',
-      message: 'Critical malware detected on DESKTOP-ABC123',
-      timestamp: '2025-01-02T14:30:00Z',
-      severity: 'critical',
-      read: false
-    },
-    {
-      id: '2',
-      message: 'High priority threat resolved on SERVER-XYZ789',
-      timestamp: '2025-01-02T14:25:00Z',
-      severity: 'high',
-      read: false
-    },
-    {
-      id: '3',
-      message: 'New device connection approved',
-      timestamp: '2025-01-02T14:20:00Z',
-      severity: 'low',
-      read: true
-    }
+    { id: '1', message: 'Critical malware detected on DESKTOP-ABC123', timestamp: '2025-01-02T14:30:00Z', severity: 'critical', read: false },
+    { id: '2', message: 'High priority threat resolved on SERVER-XYZ789', timestamp: '2025-01-02T14:25:00Z', severity: 'high', read: false },
+    { id: '3', message: 'New device connection approved', timestamp: '2025-01-02T14:20:00Z', severity: 'low', read: true }
   ]);
 
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -326,8 +312,10 @@ const Navbar: React.FC = () => {
 
   if (!isAuthenticated) return null;
 
+  // UPDATED NAVIGATION ITEMS
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard' },
+    ...(user?.role.startsWith('soc') ? [{ name: 'Log Summary', href: '/logs' }] : []),
     ...(user?.role === 'admin' ? [] : [{ name: 'Threats', href: '/threats' }]),
     ...(user?.role === 'admin' ? [] : [{ name: 'Tickets', href: '/tickets' }]),
     { name: 'Device List', href: '/agents' },

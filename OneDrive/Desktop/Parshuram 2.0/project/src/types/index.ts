@@ -163,10 +163,6 @@ export interface User {
   role: 'admin' | 'soc-l1' | 'soc-l2' | 'soc-l3' | 'soc-l4';
   employeeId: string;
   department: string;
-  credentials?: {
-    username: string;
-    password: string;
-  };
 }
 
 export interface Device {
@@ -178,12 +174,6 @@ export interface Device {
   hardwareInfo: string[];
   requestTime: string;
   status: 'pending' | 'approved' | 'rejected';
-  geolocation?: {
-    lat: number;
-    lng: number;
-    city: string;
-    country: string;
-  };
 }
 
 export interface Agent {
@@ -196,12 +186,7 @@ export interface Agent {
   status: 'active' | 'disconnected' | 'maintenance';
   lastSeen: string;
   uptime: string;
-  geolocation: {
-    lat: number;
-    lng: number;
-    city: string;
-    country: string;
-  };
+  geolocation: { lat: number; lng: number; city: string; country: string; };
   alertsCount: number;
   threatsCount: number;
 }
@@ -224,11 +209,7 @@ export interface ThreatLog {
   description: string;
   isProcessed: boolean;
   isFixed: boolean;
-  isFalsePositive?: boolean; 
-  elevatedBy?: string;
-  elevatedTo?: 'soc-l2' | 'soc-l3' | 'soc-l4';
-  elevatedAt?: string;
-  elevationReason?: string;
+  isFalsePositive?: boolean;
 }
 
 export interface Log {
@@ -245,42 +226,43 @@ export interface Log {
   task: string;
   computer: string;
   channel: string;
-  isThreat?: boolean;
-  ruleMatched?: string;
-  message?: string;
-  elevatedBy?: string;
-  elevatedTo?: 'soc-l2' | 'soc-l3' | 'soc-l4';
-  elevatedAt?: string;
-  elevationReason?: string;
 }
 
-// UPDATED TICKET TYPE
+// NEW TYPE FOR ATTACHMENTS
+export interface Attachment {
+    id: string;
+    fileName: string;
+    fileType: string;
+    fileSize: string;
+}
+
 export interface Ticket {
   id: string;
   title: string;
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'open' | 'triaged' | 'in-progress' | 'resolved' | 'closed'; // Updated states
-  assignee: string; // This will now represent the SOC group (e.g., 'SOC L1')
+  status: 'open' | 'triaged' | 'in-progress' | 'resolved' | 'closed';
+  assignee: string;
   reporter: string;
   createdAt: string;
   updatedAt: string;
   relatedLogId?: string;
-  relatedAlertId?: string; // Link to the original SIEM alert
+  relatedAlertId?: string;
   elevatedBy?: string;
   elevatedTo?: 'soc-l2' | 'soc-l3' | 'soc-l4';
   elevatedAt?: string;
-  elevationReason?: string;
   escalationLevel?: number;
-  comments?: TicketComment[]; // For analyst updates
+  comments?: TicketComment[];
+  attachments?: Attachment[]; // Add attachments to the ticket itself
+  contributors?: string[]; // New field for contributors
 }
 
-// NEW TYPE FOR TICKET COMMENTS
 export interface TicketComment {
     id: string;
     author: string;
     timestamp: string;
     comment: string;
+    attachments?: Attachment[]; // Add attachments to comments
 }
 
 export interface Notification {
